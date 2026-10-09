@@ -1,0 +1,13 @@
+{
+  "name": "aeroshield-final-sih-v25",
+  "version": "25.3.0",
+  "private": true,
+  "description": "AEROSHIELD final standalone SIH showcase with fully functional training simulation",
+  "scripts": {
+    "dev": "node server.cjs",
+    "start": "node server.cjs",
+    "check": "node scripts/validate.cjs",
+    "build": "node scripts/validate.cjs",
+    "test:e2e": "python3 tests/e2e_scenarios.py"
+  }
+}

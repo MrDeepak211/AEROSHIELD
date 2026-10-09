@@ -1,0 +1,190 @@
+/* AEROSHIELD scenario layer — additive styles for the scenario-driven Training Engine.
+   Loaded after styles.css / final.css; does not alter the existing look of other pages. */
+
+/* ---------- battlefield scene (generated per scenario) ---------- */
+.battlefield{background:#02080d!important;background-image:none!important}
+.sceneLayer{position:absolute;inset:0;z-index:0;overflow:hidden}
+.sceneSvg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fx{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fx span{position:absolute;inset:0;display:block}
+.fx-urban .fxA{background:linear-gradient(180deg,rgba(255,170,90,.0) 55%,rgba(255,150,80,.16))}
+.fx-urban .fxB{background:radial-gradient(ellipse at 50% 100%,rgba(255,200,120,.16),transparent 60%)}
+.fx-border .fxA{background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 40%)}
+.fx-swarm .fxA{background:linear-gradient(180deg,rgba(255,160,80,.0) 50%,rgba(255,150,70,.12))}
+.fx-swarm .fxB{background:repeating-linear-gradient(90deg,rgba(255,80,80,.0) 0 40px,rgba(255,80,80,.035) 40px 41px)}
+
+/* night: dark + thermal / IR style visualization */
+.theme-night .sceneLayer{filter:grayscale(.55) contrast(1.25) brightness(1.2) sepia(.35) hue-rotate(75deg) saturate(1.6)}
+.fx-night .fxA{background:rgba(0,16,10,.16)}
+.fx-night .fxB{background:repeating-linear-gradient(0deg,rgba(40,255,160,.05) 0 1px,transparent 1px 3px)}
+.fx-night .fxC{background:radial-gradient(ellipse at 50% 50%,transparent 42%,rgba(0,12,8,.7))}
+.theme-night .contactMark{box-shadow:0 0 22px #5dffb050;border-color:#7dffc8}
+.theme-night .contactMark b{color:#a9ffd9}
+
+/* degraded: interference, visual noise and warnings */
+.fx-degraded .fxA{background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px);animation:fxNoise .35s steps(3) infinite}
+.fx-degraded .fxB{background:linear-gradient(180deg,transparent 0,rgba(220,235,245,.16) 48%,transparent 52%);height:18%;inset:auto 0 auto 0;animation:fxGlitch 4.2s linear infinite}
+.fx-degraded .fxC{background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(255,110,40,.22));animation:fxWarn 2.4s ease-in-out infinite}
+.theme-degraded .sceneLayer{filter:grayscale(.35) contrast(.92) blur(.4px)}
+@keyframes fxNoise{0%{transform:translate(0,0)}33%{transform:translate(-2px,1px)}66%{transform:translate(1px,-2px)}100%{transform:translate(0,0)}}
+@keyframes fxGlitch{0%{top:-20%}100%{top:110%}}
+@keyframes fxWarn{0%,100%{opacity:.55}50%{opacity:1}}
+
+/* mixed: environment change (dusk -> night + rain) */
+.fx-mixed .fxA{background:rgba(5,8,20,0);transition:background 2s}
+.fx-mixed.ph1 .fxA{background:rgba(3,6,18,.5)}
+.fx-mixed .fxB{opacity:0;transition:opacity 2s;background:repeating-linear-gradient(105deg,rgba(170,205,255,.0) 0 7px,rgba(170,205,255,.22) 7px 8px);background-size:60px 60px;animation:fxRain .45s linear infinite}
+.fx-mixed.ph1 .fxB{opacity:.9}
+.fx-mixed.ph1 .fxC{background:radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(0,0,12,.6))}
+@keyframes fxRain{0%{background-position:0 0}100%{background-position:-18px 60px}}
+.theme-mixed .sceneLayer{transition:filter 2s}
+.theme-mixed.hasPhase .sceneLayer{filter:brightness(.6) saturate(.8)}
+
+/* HUD compass strip + alerts */
+.hudCompass{position:absolute;top:7px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:26px;font-size:7px;letter-spacing:.14em;color:rgba(160,225,255,.75);padding:3px 14px;border-bottom:1px solid rgba(120,220,255,.25);background:linear-gradient(180deg,rgba(2,12,18,.55),transparent)}
+.hudCompass span:nth-child(3){color:#fff}
+.alertStrip{position:absolute;top:30px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:46%}
+.alertStrip span{font-size:7px;letter-spacing:.08em;padding:3px 7px;border-radius:4px;background:rgba(40,8,10,.82);border:1px solid #b23a3a;color:#ff8a8a;animation:fxWarn 1.6s ease-in-out infinite}
+.alertStrip:empty{display:none}
+.telemetry>div.warn{border-color:#9a7a2a;color:#ffc45d}
+.telemetry>div.warn b{color:#ffd98c}
+.telemetry>div.off{border-color:#9a2f3a;color:#ff7080}
+.telemetry>div.off b{color:#ff9aa4}
+.environmentEvent{max-width:calc(100% - 20px)}
+
+/* decision feedback / briefing banner */
+.feedback#feedback{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:6;max-width:46%;text-align:center;pointer-events:none}
+.feedback#feedback:empty{display:none}
+.fb{display:inline-block;font-size:8px;line-height:1.5;padding:6px 10px;border-radius:6px;background:rgba(3,16,24,.9);border:1px solid #1d6a86;color:#cdeaf4}
+.fb b{color:#2df0bd;letter-spacing:.1em;margin-right:5px}
+.fb.correct{border-color:#1fbf8a;color:#9bf5d2}
+.fb.premature,.fb.ok{border-color:#9a7a2a;color:#ffd98c}
+.fb.false-positive,.fb.false-escalation,.fb.missed-threat,.fb.blind{border-color:#b23a3a;color:#ff9aa4}
+.fb.ok{border-color:#1d6a86;color:#cdeaf4}
+
+/* contacts */
+.contactMark{transition:left 1s linear,top 1s linear,opacity .4s ease!important;white-space:nowrap;transform:translate(-50%,-50%)}
+.contactMark b{display:flex;align-items:center;gap:4px}
+.contactMark.sel{outline:1px solid #2df0bd;outline-offset:2px;z-index:6}
+.contactMark.tracked{box-shadow:0 0 14px #27d9ff55}
+.contactMark.clsDrone b{color:#7dffe6}
+.contactMark.clsClutter{border-color:#6f8590;opacity:.7}
+.contactMark.clsClutter b{color:#a9bcc4}
+.contactMark.lost{opacity:.5;border-style:dashed;border-color:#6f8590}
+.contactMark.lost b{color:#9db0b9}
+.contactMark.conflict{border-color:#e7a94a;animation:fxWarn 1s ease-in-out infinite}
+.contactMark.merged{border-color:#c58bff}
+.contactMark .prio{font-style:normal;font-size:7px;padding:1px 4px;border-radius:3px;background:#ff3d50;color:#fff;letter-spacing:.04em}
+.contactMark.p2 .prio{background:#ff8a3d}
+.contactMark.p3 .prio{background:#e7c24a;color:#201a05}
+.battlefield.dense .contactMark{padding:3px 5px}
+.battlefield.dense .contactMark small{display:none}
+.battlefield.dense .contactMark.sel small,.battlefield.dense .contactMark.lost small{display:block}
+.battlefield.dense .contactMark b{font-size:7px}
+
+/* mission aside */
+.missionThumb{height:62px;border-radius:7px;background-size:cover;background-position:center;border:1px solid #16445a;margin:-6px 0 4px}
+.objBox{margin-top:12px;padding:9px;border:1px solid #16445a;border-radius:9px;background:#041622;font-size:7px;color:#93aab6}
+.objTitle{font-size:7px;letter-spacing:.14em;color:#13c7ff;margin-bottom:4px}
+.objMain{font-size:8px;line-height:1.5;color:#e1edf2;margin:0 0 7px}
+.objRow{display:grid;grid-template-columns:12px 1fr auto;gap:5px;align-items:start;margin:5px 0;font-size:7px;line-height:1.4}
+.objRow i{font-style:normal;color:#6f8590}
+.objRow em{font-style:normal;color:#8fb3c2;white-space:nowrap}
+.objRow.done i,.objRow.done em{color:#2df0bd}
+.objRow.fail i,.objRow.fail em{color:#ff6572}
+.wRow{display:flex;justify-content:space-between;margin:3px 0;font-size:7px}
+.wRow b{color:#d7e8ee}
+
+/* live sensor feed */
+.sensorImage{overflow:hidden!important;background:#02080c!important}
+.sensorImage:after{display:none!important}
+.feedSvg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sensorImage .scanline{z-index:2;pointer-events:none}
+.rsweep{animation:rsweep 3.2s linear infinite}
+@keyframes rsweep{from{transform:rotate(-60deg)}to{transform:rotate(60deg)}}
+.sensorTabs button{background:none;border:0;font:inherit;font-size:7px;padding:3px 5px;color:#87a1af;cursor:pointer;border-radius:3px}
+.sensorTabs button.on{background:#0a79b2;color:#fff}
+.sensorTabs button:hover:not(.on){color:#dff5ff}
+.sensorChips{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}
+.sChip{border:1px solid #1b5066;border-radius:5px;background:#05141f;padding:4px 5px;display:flex;flex-direction:column;gap:1px}
+.sChip span{font-size:6px;letter-spacing:.1em;color:#7894a5}
+.sChip b{font-size:10px;color:#d9ecf3}
+.sChip i{font-style:normal;font-size:6px;letter-spacing:.05em;color:#2df0bd}
+.sChip.warn{border-color:#8a6a22}.sChip.warn i,.sChip.warn b{color:#ffc45d}
+.sChip.off{border-color:#8a2a34;background:#1a0a0e}.sChip.off i,.sChip.off b{color:#ff6572}
+
+/* AAR additions */
+.aarFacts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 4px}
+.aarFacts span{font-size:6px;color:#708b9a;letter-spacing:.06em;text-transform:uppercase}
+.aarFacts b{display:block;font-size:8px;color:#e1edf2;margin-top:2px;text-transform:none;letter-spacing:0}
+.perfRow em{font-style:normal;color:#13c7ff;margin-left:3px}
+.aarNote{display:block;margin-top:6px;font-size:7px;color:#708b9a}
+.aarWide{grid-column:1/-1}
+.aarWideGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+.aarCounters{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.aarCounters span{font-size:7px;color:#708b9a}
+.aarCounters b{display:block;font-size:11px;color:#e1edf2}
+@media(max-width:900px){.aarWideGrid{grid-template-columns:1fr}.aarFacts{grid-template-columns:repeat(2,1fr)}}
+
+/* replay stage (scenario reconstruction) */
+.replayStage{background:#02080d!important}
+.replayStage .sceneLayer{z-index:0}
+.replayStage.theme-night .sceneLayer{filter:grayscale(.55) contrast(1.25) brightness(1.2) sepia(.35) hue-rotate(75deg) saturate(1.6)}
+.replayStage.theme-degraded .sceneLayer{filter:grayscale(.35) contrast(.92)}
+.replayHud,.replayEventCard,#replayContacts,.replaySensors{z-index:4}
+.rpMark{position:absolute;transform:translate(-50%,-50%);z-index:4;transition:left .5s linear,top .5s linear}
+.rpMark i{display:block;width:12px;height:12px;border:1px solid #ff5867;border-radius:50%;box-shadow:0 0 12px #ff586799;margin:auto}
+.rpMark span{position:absolute;left:16px;top:-1px;font-size:6px;color:#ffb0b8;white-space:nowrap}
+.rpMark.clutter i{border-color:#8da4b0;box-shadow:none}.rpMark.clutter span{color:#b4c4cb}
+.rpMark.lost{opacity:.5}.rpMark.lost i{border-style:dashed}
+.rpMark.fp i{border-color:#e7a94a}
+.replaySensors{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:3px}
+.replaySensors span{font-size:6px;padding:3px 6px;background:#041722dd;border:1px solid #17516a;border-radius:4px;color:#bfe6f2;white-space:nowrap}
+.replaySensors span b{color:#2df0bd;margin:0 3px}
+.replaySensors span.off{border-color:#8a2a34;color:#ff9aa4}.replaySensors span.off b{color:#ff6572}
+.replayStage .fx{z-index:2}
+
+/* ================= 3D world (V25.3) ================= */
+.world3d{position:absolute;inset:0;z-index:0;overflow:hidden;background:#02080d}
+.world3dCanvas{display:block;width:100%;height:100%;touch-action:none}
+.world3d .sceneSvg.fallback{position:absolute;inset:0}
+.world3dCanvas.thermal,.battlefield.thermal .world3dCanvas{filter:grayscale(1) contrast(1.35) brightness(1.2) sepia(1) hue-rotate(68deg) saturate(2.6)}
+.theme-night .world3dCanvas:not(.thermal){filter:saturate(.85) contrast(1.1) brightness(1.18)}
+.theme-night .sceneLayer,.theme-degraded .sceneLayer{filter:none}
+.fx-mixed .fxB{display:none}
+.markerLayer{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.markerLayer .contactMark{pointer-events:auto;position:absolute;transform-origin:0 0;will-change:transform;margin:0}
+.crosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;pointer-events:none;width:46px;height:46px}
+.crosshair span{position:absolute;inset:0;border:1px solid rgba(45,240,189,.7);border-radius:50%}
+.crosshair span:before,.crosshair span:after{content:"";position:absolute;background:rgba(45,240,189,.8)}
+.crosshair span:before{left:50%;top:-8px;width:1px;height:62px}
+.crosshair span:after{top:50%;left:-8px;height:1px;width:62px}
+.crosshair b{position:absolute;top:56px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:6px;letter-spacing:.14em;color:rgba(45,240,189,.75)}
+.hudCompass{display:block!important;width:340px;height:24px;overflow:hidden;padding:0!important;gap:0!important;border-bottom:1px solid rgba(120,220,255,.3);-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent)}
+.hudCompass span{position:absolute;top:5px;transform:translateX(-50%);font-size:7px;color:rgba(160,225,255,.5);letter-spacing:.06em}
+.hudCompass span.mj{color:rgba(190,235,255,.95);font-size:8px}
+.hudCompass span.cur{color:#2df0bd}
+.hudCompass i{position:absolute;left:50%;bottom:0;transform:translateX(-50%);border:4px solid transparent;border-bottom-color:#2df0bd;border-top:0}
+
+/* two-stick flight controls (Mode 2) */
+.stickDock{position:absolute;bottom:12px;z-index:7;width:138px;padding:7px 8px 6px;border:1px solid rgba(60,170,210,.4);border-radius:14px;background:rgba(3,14,22,.74);text-align:center;backdrop-filter:blur(3px)}
+.stickDock.left{left:12px}.stickDock.right{right:12px}
+.stickTitle{font-size:6px;letter-spacing:.14em;color:#6f93a6;text-align:left;display:flex;flex-direction:column;gap:1px}
+.stickTitle b{font-size:8px;color:#dff5ff;letter-spacing:.08em}
+.stickDock small{display:block;font-size:6px;color:#6f93a6;margin-top:4px}
+.stick{position:relative;width:104px;height:104px;margin:6px auto 0;border-radius:50%;border:1px solid #1d6a86;background:radial-gradient(circle at 50% 50%,#0b2a3a,#041018 72%);touch-action:none;cursor:grab;user-select:none}
+.stick:active{cursor:grabbing}
+.stick .ax{position:absolute;background:rgba(80,190,230,.22)}
+.stick .ax.h{left:8px;right:8px;top:50%;height:1px}.stick .ax.v{top:8px;bottom:8px;left:50%;width:1px}
+.stick .lbl{position:absolute;font-style:normal;font-size:6px;letter-spacing:.06em;color:#4f7488}
+.stick .lbl.t{top:4px;left:50%;transform:translateX(-50%)}.stick .lbl.b{bottom:4px;left:50%;transform:translateX(-50%)}
+.stick .lbl.l{left:6px;top:50%;transform:translateY(-50%)}.stick .lbl.r{right:6px;top:50%;transform:translateY(-50%)}
+.stickThumb{position:absolute;left:50%;top:50%;width:42px;height:42px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 30%,#9ff3ff,#1aa6d6 60%,#0a5c80);box-shadow:0 0 14px rgba(40,200,255,.55);pointer-events:none}
+.stickDock.right .stickThumb{background:radial-gradient(circle at 35% 30%,#b9ffe3,#1fbf8a 60%,#0a6a4c);box-shadow:0 0 14px rgba(45,240,189,.5)}
+.flightHud{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:7;display:flex;gap:10px;align-items:center;padding:5px 10px;border:1px solid rgba(60,170,210,.35);border-radius:9px;background:rgba(3,14,22,.78);font-size:8px;color:#8fb3c2;white-space:nowrap}
+.flightHud b{color:#dff5ff;font-weight:700;margin:0 2px}
+.flightHud button{font:inherit;font-size:7px;letter-spacing:.06em;padding:3px 7px;border:1px solid #1d6a86;border-radius:5px;background:#05202e;color:#bfe6f2;cursor:pointer}
+.flightHud button:hover{background:#0a3a50}
+.feedback#feedback{bottom:46px!important}
+@media(max-width:1100px){.stickDock{width:116px}.stick{width:86px;height:86px}.stickThumb{width:36px;height:36px}.flightHud{font-size:7px;gap:6px}}
+.miniRadar .rb.me{background:#2df0bd!important;box-shadow:0 0 8px #2df0bd;width:7px;height:7px;border-radius:2px}
